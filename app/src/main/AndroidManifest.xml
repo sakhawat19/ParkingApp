@@ -56,7 +56,6 @@
         <activity
             android:name=".ui.MapActivity"
             android:label="@string/title_activity_map" />
-        <activity android:name=".ui.SigninActivity"></activity>
     </application>
 
 </manifest>
