@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/signup"
-        android:textSize="@dimen/title_22"
+        android:textSize="@dimen/title_20"
         android:textColor="@color/BlackColor"
         android:textAlignment="viewStart" />
 

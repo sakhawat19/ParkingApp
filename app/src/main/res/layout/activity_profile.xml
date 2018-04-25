@@ -29,7 +29,7 @@
             android:layout_marginLeft="@dimen/margin_20"
             android:text="Sample User Name"
             android:gravity="fill_vertical"
-            android:textSize="@dimen/title_22"
+            android:textSize="@dimen/title_20"
             android:textColor="@color/BlackColor"
             android:textStyle="bold"
             android:layout_weight="1"/>
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/margin_10"
             android:text="+880 1844006748"
-            android:textSize="@dimen/title_22"
+            android:textSize="@dimen/title_20"
             android:gravity="fill_vertical"
             android:layout_weight="1"/>
 
@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/margin_10"
             android:text="DHK MA 51-5953"
-            android:textSize="@dimen/title_22"
+            android:textSize="@dimen/title_20"
             android:gravity="fill_vertical"
             android:layout_marginBottom="@dimen/margin_20"
             android:layout_weight="1"/>
@@ -116,7 +116,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/margin_10"
             android:text="DHK MA 51-5953"
-            android:textSize="@dimen/title_22"
+            android:textSize="@dimen/title_20"
             android:gravity="fill_vertical"
             android:layout_weight="1"/>
 
