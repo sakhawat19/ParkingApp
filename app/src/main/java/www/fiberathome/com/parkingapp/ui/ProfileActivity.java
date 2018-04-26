@@ -10,7 +10,9 @@ import www.fiberathome.com.parkingapp.utils.SharedPreManager;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private TextView fullname;
+    private TextView fullnameTV;
+    private TextView mobileNoTV;
+    private TextView vehicleNoTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,10 +20,14 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         // intialize
-        fullname = findViewById(R.id.user_fullName);
+        fullnameTV = findViewById(R.id.user_fullName);
+        mobileNoTV = findViewById(R.id.user_mobile_no);
+        vehicleNoTV = findViewById(R.id.user_vehicle_no);
 
         User user = SharedPreManager.getInstance(this).getUser();
-        fullname.setText(user.getFullName());
+        fullnameTV.setText(user.getFullName());
+        mobileNoTV.setText("+88" + user.getMobileNo());
+        vehicleNoTV.setText(user.getVehicleNo());
 
     }
 }
