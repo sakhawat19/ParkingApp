@@ -40,6 +40,7 @@ import www.fiberathome.com.parkingapp.utils.AppConfig;
 import www.fiberathome.com.parkingapp.utils.AppController;
 import www.fiberathome.com.parkingapp.utils.HttpsTrustManager;
 import www.fiberathome.com.parkingapp.utils.RequestHandler;
+import www.fiberathome.com.parkingapp.utils.SharedPreManager;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -224,7 +225,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                         user.setFullName(userJson.getString("vehicle_no"));
 
                         // Store to share preference
-                        showMessage("Done2");
+                        SharedPreManager.getInstance(getApplicationContext()).userLogin(user);
 
                         // Move to another activity
                         Intent intent = new Intent(SignupActivity.this, LoginActivity.class);

@@ -31,6 +31,7 @@ import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.model.User;
 import www.fiberathome.com.parkingapp.utils.AppConfig;
 import www.fiberathome.com.parkingapp.utils.AppController;
+import www.fiberathome.com.parkingapp.utils.SharedPreManager;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -140,6 +141,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         user.setVehicleNo(userJson.getString("vehicle_no"));
 
                         // storing the user in sharedPreference
+                        SharedPreManager.getInstance(getApplicationContext()).userLogin(user);
 
 
                         // Move to another Activity
