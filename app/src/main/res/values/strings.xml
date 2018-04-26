@@ -30,6 +30,8 @@
     <!-- Error Message -->
     <string name="err_msg_mobile">Enter valid mobile number!</string>
     <string name="err_msg_password">Enter valid password!</string>
+    <string name="err_msg_fullname">Enter Full Name</string>
+    <string name="err_msg_vehicle">Enter vehicle no!</string>
 
 
 </resources>

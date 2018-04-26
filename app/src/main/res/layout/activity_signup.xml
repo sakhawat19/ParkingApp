@@ -6,116 +6,125 @@
     android:layout_height="match_parent"
     tools:context=".ui.StartActivity"
     android:orientation="vertical"
-    android:background="@color/whiteColor"
-    android:layout_margin="@dimen/margin_10">
+    android:background="@android:color/white">
 
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/start_paring_image"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/signup"
-        android:textSize="@dimen/title_20"
-        android:textColor="@color/BlackColor"
-        android:textAlignment="viewStart" />
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/signup_fullname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_10">
-
-        <EditText
-            android:id="@+id/signup_fullname_ET"
-            android:textColor="#000000"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="@string/full_name"
-            android:layout_marginBottom="@dimen/margin_10"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/signup_mobile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/signup_mobile_ET"
-            android:textColor="#000000"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:hint="@string/hint_phoneno" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/signup_vehicle_reg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/signup_vehicle_reg_ET"
-            android:textColor="#000000"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:hint="@string/reg_num" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/signup_input_layout_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/signup_input_layout_password_ET"
-            android:textColor="#000000"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="@string/hint_pass" />
-    </android.support.design.widget.TextInputLayout>
-
-    <ImageView
-        android:id="@+id/car_photo_IV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/margin_10">
+        android:padding="@dimen/padding_30"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/signup_image_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/car_icon"
-            android:layout_marginLeft="5dp"
-             />
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/start_paring_image"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10" />
 
-        <Button android:id="@+id/signup_final_btn"
-            android:layout_width="fill_parent"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/signup"
-            android:layout_margin="5dp"
-            android:textAlignment="center"
-            android:background="@color/LogoRed"
-            android:layout_marginRight="10dp"
-            android:textColor="@color/whiteColor"/>
+            android:textSize="@dimen/title_20"
+            android:textColor="@color/BlackColor"
+            android:textAlignment="viewStart" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_fullname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10">
+
+            <EditText
+                android:id="@+id/input_fullname"
+                android:textColor="#000000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="@string/full_name"
+                android:layout_marginBottom="@dimen/margin_10"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Mobile No -->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_mobile_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/input_mobile_number"
+                android:textColor="#000000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:hint="@string/hint_phoneno" />
+        </android.support.design.widget.TextInputLayout>
+        <!-- Mobile No -->
+
+        <!-- Vehicle No -->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_vehicle_no"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/input_vehicle_no"
+                android:textColor="#000000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPhonetic"
+                android:hint="@string/reg_num" />
+        </android.support.design.widget.TextInputLayout>
+        <!-- Vehicle No -->
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/input_password"
+                android:textColor="#000000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:hint="@string/hint_pass" />
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/car_photo_IV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_10">
+
+            <Button
+                android:id="@+id/signup_image_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/car_icon"
+                android:layout_marginLeft="5dp"
+                />
+
+            <Button android:id="@+id/signup_final_btn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/signup"
+                android:textAlignment="center"
+                android:background="@color/LogoRed"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/whiteColor"/>
 
 
+
+        </LinearLayout>
 
     </LinearLayout>
-
-
 
 </LinearLayout>
