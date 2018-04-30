@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import www.fiberathome.com.parkingapp.HomeActivity;
 import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.model.User;
 import www.fiberathome.com.parkingapp.utils.AppConfig;
@@ -70,6 +71,14 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        // Check user is logged in
+        if (SharedPreManager.getInstance(getApplicationContext()).isLoggedIn()){
+            Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
 
 
         // Initialize Components

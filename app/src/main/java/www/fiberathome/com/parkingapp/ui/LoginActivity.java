@@ -31,6 +31,7 @@ import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.model.User;
 import www.fiberathome.com.parkingapp.utils.AppConfig;
 import www.fiberathome.com.parkingapp.utils.AppController;
+import www.fiberathome.com.parkingapp.utils.HttpsTrustManager;
 import www.fiberathome.com.parkingapp.utils.SharedPreManager;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -49,6 +50,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        // Check user is logged in
+        if (SharedPreManager.getInstance(getApplicationContext()).isLoggedIn()){
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
 
         // initialize component
         signinBtn = findViewById(R.id.signin_btn);
@@ -116,6 +126,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // inactive button
         progressDialog.show();
 
+
+        HttpsTrustManager.allowAllSSL();
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 AppConfig.URL_LOGIN, new Response.Listener<String>() {
             @Override

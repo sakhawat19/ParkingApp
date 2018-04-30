@@ -30,6 +30,11 @@ public class SharedPreManager {
     }
 
 
+    /**
+     * Store User Information after User Login with
+     * ID, FULLNAME, MOBILE_NO, VEHICLE_NO
+     * @param user
+     */
     public void userLogin(User user){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -56,6 +61,7 @@ public class SharedPreManager {
 
         return user;
     }
+
 
     public void logout(){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);

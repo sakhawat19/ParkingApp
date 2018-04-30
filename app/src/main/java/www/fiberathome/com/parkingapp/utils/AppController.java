@@ -14,6 +14,7 @@ public class AppController extends Application {
     private RequestQueue mRequestQueue;
     private static AppController mInstance;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -45,5 +46,9 @@ public class AppController extends Application {
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);
         }
+    }
+
+    public void setConnectivityListener(ConnectivityReceiver.ConnectivityReceiverListener listener){
+        ConnectivityReceiver.listener = listener;
     }
 }
