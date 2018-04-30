@@ -130,9 +130,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         HttpsTrustManager.allowAllSSL();
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 AppConfig.URL_LOGIN, new Response.Listener<String>() {
+
+
             @Override
             public void onResponse(String response) {
                 // remove the progress bar
+                Log.e("URL", AppConfig.URL_LOGIN);
                 progressDialog.dismiss();
 
                 try {

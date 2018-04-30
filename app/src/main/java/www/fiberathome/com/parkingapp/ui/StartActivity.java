@@ -9,6 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.iotsens.sdk.IoTSensApiClient;
+import com.iotsens.sdk.IoTSensApiClientBuilder;
+import com.iotsens.sdk.sensors.SensorBasic;
+import com.iotsens.sdk.sensors.SensorsRequest;
+import com.iotsens.sdk.sensors.SensorsRequestBuilder;
+
 import www.fiberathome.com.parkingapp.HomeActivity;
 import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.utils.BaseActivity;
@@ -23,10 +29,33 @@ public class StartActivity extends BaseActivity
 
 
 
+
+
+    public static final String APPLICATION_ID = "FIBERATHOMEAPP"; // must be proper application identifier
+    public static final String SECRET = "6b42713e7fcb0f08b9e01298eaad5805"; // must be proper secret
+    public static final String DEFAULT_USER = "atif.hafizuddin"; // must be a proper user
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        IoTSensApiClient apiClient = IoTSensApiClientBuilder.aIoTSensClient()
+                .withApplication(APPLICATION_ID)
+                .withSecret(SECRET)
+                .withDefaultUser(DEFAULT_USER)
+                .build();
+
+        SensorsRequest sensorsRequest = SensorsRequestBuilder.aSensorRequest()
+                .build();
+
+//        for (SensorBasic sensorBasic :  apiClient.getSensors(sensorsRequest)) {
+//            System.out.println("Sensor = " + sensorBasic.toString());
+//        }
 
         // Check user is logged in
         if (SharedPreManager.getInstance(getApplicationContext()).isLoggedIn()){
