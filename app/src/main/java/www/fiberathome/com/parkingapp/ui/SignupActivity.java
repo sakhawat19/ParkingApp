@@ -2,12 +2,9 @@ package www.fiberathome.com.parkingapp.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.nfc.Tag;
-import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,17 +12,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import android.provider.MediaStore;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
@@ -40,7 +32,6 @@ import www.fiberathome.com.parkingapp.model.User;
 import www.fiberathome.com.parkingapp.utils.AppConfig;
 import www.fiberathome.com.parkingapp.utils.AppController;
 import www.fiberathome.com.parkingapp.utils.HttpsTrustManager;
-import www.fiberathome.com.parkingapp.utils.RequestHandler;
 import www.fiberathome.com.parkingapp.utils.SharedPreManager;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
@@ -49,8 +40,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     public static final String TAG = SignupActivity.class.getSimpleName();
 
     private Button signupBtn;
-    private Button signupImageBtn;
-    private ImageView signupIv;
     private EditText fullnameET;
     private EditText mobileET;
     private EditText vehicleET;
@@ -63,9 +52,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private TextInputLayout inputLayoutMobile;
     private TextInputLayout inputLayoutVehicle;
     private TextInputLayout inputLayoutPassword;
-
-
-    private static final int CAM_REQUEST = 1313;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +75,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     private void initializeComponent() {
         signupBtn = findViewById(R.id.signup_final_btn);
-        signupImageBtn = findViewById(R.id.signup_image_btn);
-        signupIv = findViewById(R.id.car_photo_IV);
         fullnameET = findViewById(R.id.input_fullname);
         mobileET = findViewById(R.id.input_mobile_number);
         vehicleET = findViewById(R.id.input_vehicle_no);
@@ -104,39 +88,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    // Taking Photo test
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == CAM_REQUEST){
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            signupIv.setImageBitmap(bitmap);
-        }
-
-
-    }
-
-
-
-
-    class btnTakePhotoClicker implements  Button.OnClickListener{
-
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent,CAM_REQUEST);
-        }
-    }
-
-
-
-
-
-
-
-
-
 
 
     @Override
@@ -144,7 +95,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         super.onStart();
 
         signupBtn.setOnClickListener(this);
-        signupImageBtn.setOnClickListener(new btnTakePhotoClicker());
 
         fullnameET.addTextChangedListener(new MyTextWatcher(fullnameET));
         mobileET.addTextChangedListener(new MyTextWatcher(mobileET));

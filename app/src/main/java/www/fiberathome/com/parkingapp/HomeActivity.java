@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -58,7 +59,8 @@ public class HomeActivity extends AppCompatActivity
         GooglePlaceSearchNearbySearchListener,
         GoogleMap.OnMarkerClickListener,
         GPSTrackerListener,
-        GoogleMap.OnInfoWindowClickListener {
+        GoogleMap.OnInfoWindowClickListener,
+        View.OnClickListener{
 
 
     private static final String TAG = HomeActivity.class.getSimpleName();
@@ -73,6 +75,7 @@ public class HomeActivity extends AppCompatActivity
 
 
     private ProgressDialog progressDialog;
+    private Button nearest;
 
     private boolean isGoogleDone = false;
     private boolean isMyServerDone = false;
@@ -85,11 +88,11 @@ public class HomeActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Check user is logged in
-        if (!SharedPreManager.getInstance(getApplicationContext()).isLoggedIn()){
+        if (!SharedPreManager.getInstance(getApplicationContext()).isLoggedIn()) {
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
@@ -134,7 +137,6 @@ public class HomeActivity extends AppCompatActivity
             double latitude = gpsTracker.getLatitude();
             double longitude = gpsTracker.getLongitude();
 
-            showMessage("Lat: " + latitude + " Lng: " + longitude);
             if (latitude != 0.0 || longitude != 0.0) {
                 GlobalVars.location = new MyLocation(latitude, longitude);
             }
@@ -145,6 +147,8 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void initComponents() {
+        nearest = findViewById(R.id.nearest);
+        nearest.setOnClickListener(this);
     }
 
 
@@ -165,8 +169,21 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        gpsTracker.stopUsingGPS();
+        super.onStop();
+    }
+
     @Override
     protected void onPause() {
+        gpsTracker.stopUsingGPS();
         super.onPause();
 
     }
@@ -179,8 +196,10 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-
     }
+
+
+
 
 
     @Override
@@ -208,7 +227,7 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_setting) {
             return true;
         }
 
@@ -272,7 +291,6 @@ public class HomeActivity extends AppCompatActivity
         mapFragment.getMapAsync(this);
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
@@ -310,7 +328,6 @@ public class HomeActivity extends AppCompatActivity
 
 
     public  void userLocationFAB(View view){
-
         FloatingActionButton FAB = findViewById(R.id.myLocationButton);
         FAB.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("MissingPermission")
@@ -358,12 +375,15 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+
+
+
     @Override
     public void onGPSTrackerLocationChanged(Location location) {
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
-        showMessage(latitude + "-" + longitude);
+        showMessage(latitude + "---" + longitude);
         if (latitude != 0 || longitude != 0) {
             GlobalVars.location = new MyLocation(latitude, longitude);
             if (googleMap != null)
@@ -377,7 +397,17 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onGPSTrackerStatusChanged(String provider, int status, Bundle extras) {
-
+        showMessage("Status Changed");
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.nearest:
+                // get the nearest sensor information
+                nearest.setText("Reverse Spot");
+                break;
+        }
+
+    }
 }

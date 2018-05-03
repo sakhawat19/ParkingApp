@@ -2,22 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="www.fiberathome.com.parkingapp">
 
-    <permission android:name="android.permission.ACCESS_FINE_LOCATION" android:protectionLevel="dangerous"/>
-    <permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:protectionLevel="dangerous"/>
+    <permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:protectionLevel="dangerous" />
+    <permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:protectionLevel="dangerous" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:allowBackup="true"
         android:name=".utils.AppController"
+        android:allowBackup="true"
         android:icon="@drawable/loncher"
         android:label="@string/app_name"
         android:roundIcon="@drawable/loncher"
@@ -35,19 +36,15 @@
         </activity>
         <activity
             android:name=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
             android:name=".ui.SignupActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
             android:name=".ui.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.DefaultActionBar" />
         <activity android:name=".ui.QrActivity" />
         <activity android:name=".ui.ProfileActivity" />
-
-
-
-
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
