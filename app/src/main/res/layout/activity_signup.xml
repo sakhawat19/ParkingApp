@@ -7,8 +7,10 @@
     android:background="@drawable/background"
     tools:context=".ui.LoginActivity">
 
-
-    <LinearLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -17,10 +19,16 @@
         android:layout_centerInParent="true">
 
 
-        <ImageView android:src="@drawable/drower_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="72dp"
-            android:layout_marginBottom="24dp"
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/upload_profile_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="10dp"
+            android:layout_marginTop="@dimen/margin_20"
+            android:src="@drawable/camera_icon"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/colorPrimaryDark"
             android:layout_gravity="center_horizontal" />
 
         <TextView
@@ -45,7 +53,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:textColor="#000000"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
                 android:hint="@string/full_name"
                 android:layout_marginBottom="@dimen/margin_10" />
         </android.support.design.widget.TextInputLayout>
@@ -62,7 +71,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/input_mobile_number"
-                android:textColor="#000000"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
                 android:inputType="phone"
                 android:hint="@string/hint_phoneno" />
 
@@ -76,7 +86,8 @@
             style="@style/TextLabel">
             <EditText
                 android:id="@+id/input_vehicle_no"
-                android:textColor="#000000"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPhonetic"
@@ -94,7 +105,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/input_password"
-                android:textColor="#000000"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
                 android:inputType="textPassword"
                 android:hint="@string/hint_pass"/>
         </android.support.design.widget.TextInputLayout>
@@ -122,4 +134,5 @@
             android:textSize="16dip"/>
 
     </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

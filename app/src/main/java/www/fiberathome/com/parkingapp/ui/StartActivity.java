@@ -102,11 +102,8 @@ public class StartActivity extends BaseActivity
     }
 
 
-
     private void showMessage(String message) {
         Toast.makeText(StartActivity.this, message, Toast.LENGTH_LONG).show();
     }
-
-
 
 }

@@ -36,6 +36,11 @@ dependencies {
     // Glide image library
     compile 'com.github.bumptech.glide:glide:3.7.0'
 
+    // android circular imageview
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+
+
     // Google Play Service
     //Google play services
     compile 'com.google.android.gms:play-services:11.4.0'

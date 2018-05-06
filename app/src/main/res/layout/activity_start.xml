@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.StartActivity"
     android:id="@+id/start_activity"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
 

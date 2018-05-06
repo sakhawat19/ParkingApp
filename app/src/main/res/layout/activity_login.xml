@@ -17,16 +17,22 @@
         android:layout_centerInParent="true">
 
 
-        <ImageView android:src="@drawable/drower_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="72dp"
-            android:layout_marginBottom="24dp"
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:padding="10dp"
+            android:src="@drawable/applogo"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/colorPrimaryDark"
             android:layout_gravity="center_horizontal" />
+
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/signup_title"
+            android:text="@string/signin_title"
             android:textSize="@dimen/title_20"
             android:textColor="@android:color/white"
             android:textStyle="bold"
@@ -39,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:id="@+id/input_layout_mobile_number"
+            android:id="@+id/input_layout_mobile"
             android:theme="@style/TextLabel">
 
             <EditText
@@ -70,6 +76,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
                 android:singleLine="true"
                 android:hint="@string/hint_pass"/>
 
@@ -92,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:textColor="@android:color/white"
-            android:text="No account yet? Create one"
+            android:text="No account yet? Click Here"
             android:gravity="center"
             android:textSize="16dip"/>
 

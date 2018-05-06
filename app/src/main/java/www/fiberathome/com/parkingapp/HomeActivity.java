@@ -76,6 +76,8 @@ public class HomeActivity extends AppCompatActivity
 
     private ProgressDialog progressDialog;
     private Button nearest;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
 
     private boolean isGoogleDone = false;
     private boolean isMyServerDone = false;
@@ -87,8 +89,7 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Check user is logged in
@@ -98,27 +99,7 @@ public class HomeActivity extends AppCompatActivity
             finish();
         }
 
-
-        /*if (checkPlayService()){
-            // Service Check
-            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-            startActivity(intent);
-        }*/
-
-
         initialize();
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-
-        navigationView.setNavigationItemSelectedListener(this);
 
     }
 
@@ -148,7 +129,17 @@ public class HomeActivity extends AppCompatActivity
 
     private void initComponents() {
         nearest = findViewById(R.id.nearest);
-        nearest.setOnClickListener(this);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+
+
     }
 
 
@@ -172,7 +163,11 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
+
         super.onResume();
+
+        nearest.setOnClickListener(this);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override

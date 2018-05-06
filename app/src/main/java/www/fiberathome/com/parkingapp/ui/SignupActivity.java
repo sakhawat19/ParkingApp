@@ -2,6 +2,7 @@ package www.fiberathome.com.parkingapp.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -23,6 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,10 +44,18 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     public static final String TAG = SignupActivity.class.getSimpleName();
 
     private Button signupBtn;
+    private ImageView upload_profile_image;
     private EditText fullnameET;
     private EditText mobileET;
     private EditText vehicleET;
     private EditText passwordET;
+    private TextView link_login;
+
+
+    // image permission
+    private Uri selectedImageUri;
+    private String selectedPath;
+
 
     private ProgressDialog progressDialog;
 
@@ -79,12 +91,16 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         mobileET = findViewById(R.id.input_mobile_number);
         vehicleET = findViewById(R.id.input_vehicle_no);
         passwordET = findViewById(R.id.input_password);
-
+        link_login = findViewById(R.id.link_login);
+        upload_profile_image = findViewById(R.id.upload_profile_image);
 
         inputLayoutFullName = findViewById(R.id.layout_fullname);
         inputLayoutMobile = findViewById(R.id.layout_mobile_number);
         inputLayoutVehicle = findViewById(R.id.layout_vehicle_no);
         inputLayoutPassword = findViewById(R.id.layout_password);
+
+
+        // intialize permission
 
     }
 
@@ -95,6 +111,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         super.onStart();
 
         signupBtn.setOnClickListener(this);
+        link_login.setOnClickListener(this);
+        upload_profile_image.setOnClickListener(this);
 
         fullnameET.addTextChangedListener(new MyTextWatcher(fullnameET));
         mobileET.addTextChangedListener(new MyTextWatcher(mobileET));
@@ -115,6 +133,16 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.signup_final_btn:
                 submitRegistration();
                 break;
+
+            case R.id.link_login:
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.upload_profile_image:
+                showMessage("Done");
+                break;
+
         }
 
     }
@@ -190,6 +218,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                         Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
+                    }else{
+                        showMessage(jsonObject.getString("message"));
                     }
 
 
