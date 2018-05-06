@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -45,6 +46,7 @@ import www.fiberathome.com.parkingapp.gps.GPSTrackerListener;
 import www.fiberathome.com.parkingapp.model.GlobalVars;
 import www.fiberathome.com.parkingapp.model.MyLocation;
 import www.fiberathome.com.parkingapp.model.SensorList;
+import www.fiberathome.com.parkingapp.model.User;
 import www.fiberathome.com.parkingapp.module.PlayerPrefs;
 import www.fiberathome.com.parkingapp.ui.LoginActivity;
 import www.fiberathome.com.parkingapp.ui.MapActivity;
@@ -78,6 +80,8 @@ public class HomeActivity extends AppCompatActivity
     private Button nearest;
     private Toolbar toolbar;
     private NavigationView navigationView;
+    private TextView userFullName;
+    private TextView userVehicleNo;
 
     private boolean isGoogleDone = false;
     private boolean isMyServerDone = false;
@@ -131,6 +135,15 @@ public class HomeActivity extends AppCompatActivity
         nearest = findViewById(R.id.nearest);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+
+        // getting User Information
+        User user = SharedPreManager.getInstance(this).getUser();
+        View headerView = navigationView.getHeaderView(0);
+        userFullName = headerView.findViewById(R.id.header_fullname);
+        userVehicleNo = headerView.findViewById(R.id.header_vehicle_no);
+        userFullName.setText(user.getFullName());
+        userVehicleNo.setText(user.getVehicleNo());
+
 
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -192,8 +205,6 @@ public class HomeActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
     }
-
-
 
 
 

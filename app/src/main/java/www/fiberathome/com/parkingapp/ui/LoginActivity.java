@@ -71,7 +71,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         inputLayoutMobile = findViewById(R.id.input_layout_mobile);
         inputLayoutPassword = findViewById(R.id.input_layout_password);
 
-
     }
 
 
@@ -83,8 +82,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         link_signup.setOnClickListener(this);
 
 
-        mobileNumberET.addTextChangedListener(new MyTextWatcher(inputLayoutMobile));
-        passwordET.addTextChangedListener(new MyTextWatcher(inputLayoutPassword));
+        //mobileNumberET.addTextChangedListener(new MyTextWatcher(inputLayoutMobile));
+        //passwordET.addTextChangedListener(new MyTextWatcher(inputLayoutPassword));
     }
 
     @Override
@@ -111,13 +110,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void submitLogin(){
         // Loading Progress
-        if (!validateEditText(mobileNumberET, inputLayoutMobile, R.string.err_msg_mobile)){
+        if (!validateMobileNumber()){
             return;
         }
 
-        if (!validateEditText(passwordET, inputLayoutPassword, R.string.err_msg_password)){
-            return;
-        }
+//        if (!validatePassword()){
+//            return;
+//        }
 
         String mobileNo = mobileNumberET.getText().toString().trim();
         String password = passwordET.getText().toString().trim();
@@ -153,7 +152,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Log.e("Object", jsonObject.toString());
 
                     if (!jsonObject.getBoolean("error")){
-                        showMessage(jsonObject.getString("message"));
 
                         // getting the user from the response
                         JSONObject userJson = jsonObject.getJSONObject("user");
@@ -206,6 +204,44 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     /**
+     * @desc validate username
+     * @return boolean
+     */
+    private boolean validateMobileNumber() {
+        String mobileNumber = mobileNumberET.getText().toString().trim();
+        showMessage("");
+
+        if (mobileNumber.isEmpty()) {
+            inputLayoutMobile.setError(getString(R.string.err_msg_mobile));
+            requestFocus(mobileNumberET);
+            return false;
+        } else {
+            inputLayoutMobile.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    /**
+     * @desc validate Password
+     * @return
+     */
+    private boolean validatePassword(){
+        String password = passwordET.getText().toString().trim();
+        if (password.isEmpty()){
+            inputLayoutPassword.setError(getResources().getString(R.string.err_msg_password));
+            requestFocus(passwordET);
+            return false;
+
+        }else{
+            inputLayoutPassword.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+
+    /**
      * request focus
      * =============================================
      * @param view
@@ -219,25 +255,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void showMessage(String message){
         Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-    }
-
-    private boolean validateEditText(EditText editText, TextInputLayout inputLayout, int errorMessage){
-        String value = editText.getText().toString().trim();
-        if (value.isEmpty()){
-            inputLayout.setError(getResources().getString(errorMessage));
-            requestFocus(editText);
-            return false;
-        }else{
-            inputLayout.setErrorEnabled(false);
-        }
-
-        return true;
-    }
-
-    private void requestFocus(EditText view) {
-        if (view.requestFocus()){
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
     }
 
 
@@ -260,7 +277,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
                 case R.id.input_mobile_number:
-                    validateEditText(mobileNumberET, inputLayoutMobile, R.string.err_msg_fullname);
+                    validateMobileNumber();
+                    break;
+
+                case R.id.input_password:
+                    validatePassword();
                     break;
             }
         }

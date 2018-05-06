@@ -1,10 +1,19 @@
 package www.fiberathome.com.parkingapp.ui;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,17 +35,24 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import www.fiberathome.com.parkingapp.HomeActivity;
+import www.fiberathome.com.parkingapp.Manifest;
 import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.model.User;
 import www.fiberathome.com.parkingapp.utils.AppConfig;
 import www.fiberathome.com.parkingapp.utils.AppController;
+import www.fiberathome.com.parkingapp.utils.ConstructJSON;
 import www.fiberathome.com.parkingapp.utils.HttpsTrustManager;
 import www.fiberathome.com.parkingapp.utils.SharedPreManager;
+
+import static android.Manifest.permission.CAMERA;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,8 +69,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
 
     // image permission
-    private Uri selectedImageUri;
-    private String selectedPath;
+    private static final int IMAGE_PERMISSION = 4;
+    private static final int IMAGE_CAPTURE_REQUEST = 1001;
+    private String currentPhotoPath;
+
 
 
     private ProgressDialog progressDialog;
@@ -100,10 +118,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         inputLayoutPassword = findViewById(R.id.layout_password);
 
 
-        // intialize permission
 
     }
-
 
 
     @Override
@@ -140,12 +156,73 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.upload_profile_image:
-                showMessage("Done");
+                showMessage("CAMERA!");
+                startCameraActivityIntent();
                 break;
 
         }
 
     }
+
+    private void startCameraActivityIntent() {
+        // Require Camera permission
+        String[] permissions = {
+                "android.permission.CAMERA",
+        };
+
+        // Intent to start Camera
+        Intent startCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, permissions, IMAGE_CAPTURE_REQUEST);
+
+        }else{
+            if (startCamera.resolveActivity(getPackageManager()) != null){
+                File photoFile = createImageFile();
+
+                if (photoFile != null){
+                    Uri photoURL = FileProvider.getUriForFile(this, "www.fiberathome.com.parkingapp.fileprovider", photoFile);
+                    // For non bitmap full sized images use EXTRA_OUTPUT during INTENT
+                    startCamera.putExtra(MediaStore.EXTRA_OUTPUT, photoURL);
+                    startActivityForResult(startCamera, IMAGE_CAPTURE_REQUEST);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == IMAGE_CAPTURE_REQUEST && resultCode == RESULT_OK){
+
+
+        }
+    }
+
+
+    private File createImageFile() {
+        // create image filename
+        String imageFileName = "JPEG_00";
+
+        // ACCESS storage directory for photos and create temporary photo
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = null;
+
+        try{
+            image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        assert image != null;
+        currentPhotoPath = image.getAbsolutePath();
+        Log.e("Photo Path", currentPhotoPath);
+        return image;
+
+    }
+
 
     private void submitRegistration() {
         // Loading Progress

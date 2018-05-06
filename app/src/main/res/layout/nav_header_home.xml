@@ -23,7 +23,7 @@
             android:layout_height="75dp"
             android:padding="10dp"
             android:layout_marginTop="@dimen/margin_20"
-            android:src="@drawable/sample_profile"
+            android:src="@drawable/blank_profile_pic"
             app:civ_border_width="2dp"
             app:civ_border_color="@color/colorPrimaryDark" />
 
@@ -32,7 +32,7 @@
             android:id="@+id/header_fullname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Jewel Mahmud"
+            android:text="Fiber@Home"
             android:textSize="@dimen/font_size_18"
             android:textStyle="bold"
             android:textAllCaps="true"
