@@ -11,6 +11,7 @@ public class SharedPreManager {
     private static final String KEY_FULLNAME = "fullname";
     private static final String KEY_MOBILE_NO = "mobile_no";
     private static final String KEY_VEHICLE_NO = "vehicle_no";
+    private static final String KEY_PROFILE_PIC = "profile_pic";
     private static final String KEY_ID = "id";
 
 
@@ -42,6 +43,7 @@ public class SharedPreManager {
         editor.putString(KEY_FULLNAME, user.getFullName());
         editor.putString(KEY_MOBILE_NO, user.getMobileNo());
         editor.putString(KEY_VEHICLE_NO, user.getVehicleNo());
+        editor.putString(KEY_PROFILE_PIC, user.getProfilePic());
         editor.apply();
     }
 
@@ -58,6 +60,7 @@ public class SharedPreManager {
         user.setFullName(sharedPreferences.getString(KEY_FULLNAME, null));
         user.setMobileNo(sharedPreferences.getString(KEY_MOBILE_NO, null));
         user.setVehicleNo(sharedPreferences.getString(KEY_VEHICLE_NO, null));
+        user.setProfilePic(sharedPreferences.getString(KEY_PROFILE_PIC, null));
 
         return user;
     }

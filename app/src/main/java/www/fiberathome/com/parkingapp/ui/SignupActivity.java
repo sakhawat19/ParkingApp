@@ -2,11 +2,13 @@ package www.fiberathome.com.parkingapp.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -14,9 +16,11 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -31,10 +35,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.cast.framework.media.ImagePicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,7 +66,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     public static final String TAG = SignupActivity.class.getSimpleName();
 
     private Button signupBtn;
-    private ImageView upload_profile_image;
     private EditText fullnameET;
     private EditText mobileET;
     private EditText vehicleET;
@@ -68,11 +73,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private TextView link_login;
 
 
-    // image permission
-    private static final int IMAGE_PERMISSION = 4;
-    private static final int IMAGE_CAPTURE_REQUEST = 1001;
-    private String currentPhotoPath;
 
+
+    // image permission
+    private static final int REQUEST_PICK_GALLERY = 1001;
+    private static final int REQUEST_PICK_IMAGE_CAMERA = 1002;
+    private Bitmap bitmap;
 
 
     private ProgressDialog progressDialog;
@@ -82,6 +88,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private TextInputLayout inputLayoutMobile;
     private TextInputLayout inputLayoutVehicle;
     private TextInputLayout inputLayoutPassword;
+    private ImageView upload_profile_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,8 +123,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         inputLayoutMobile = findViewById(R.id.layout_mobile_number);
         inputLayoutVehicle = findViewById(R.id.layout_vehicle_no);
         inputLayoutPassword = findViewById(R.id.layout_password);
-
-
 
     }
 
@@ -157,70 +162,118 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
             case R.id.upload_profile_image:
                 showMessage("CAMERA!");
-                startCameraActivityIntent();
+                if (isPermissionGranted()){
+                    showPictureDialog();
+                }
                 break;
 
         }
 
     }
 
-    private void startCameraActivityIntent() {
-        // Require Camera permission
-        String[] permissions = {
-                "android.permission.CAMERA",
+    /**
+     * showPictureDialog
+     * -------------------------------------------------
+     * Selecting picture from Gallery
+     * Selecting picture from Camera
+     * -------------------------------------------------
+     */
+    private void showPictureDialog(){
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        pictureDialog.setTitle("Select Image");
+        String[] pictureDialogItems = {
+                "Select photo from gallery",
+                "Capture photo from camera"
         };
 
-        // Intent to start Camera
-        Intent startCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                choosePhotoFromGallary();
+                                break;
+                            case 1:
+                                takePhotoFromCamera();
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
+    }
 
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, permissions, IMAGE_CAPTURE_REQUEST);
 
-        }else{
-            if (startCamera.resolveActivity(getPackageManager()) != null){
-                File photoFile = createImageFile();
+    public void choosePhotoFromGallary() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                if (photoFile != null){
-                    Uri photoURL = FileProvider.getUriForFile(this, "www.fiberathome.com.parkingapp.fileprovider", photoFile);
-                    // For non bitmap full sized images use EXTRA_OUTPUT during INTENT
-                    startCamera.putExtra(MediaStore.EXTRA_OUTPUT, photoURL);
-                    startActivityForResult(startCamera, IMAGE_CAPTURE_REQUEST);
-                }
-            }
-        }
+        startActivityForResult(galleryIntent, REQUEST_PICK_GALLERY);
+    }
+
+    private void takePhotoFromCamera() {
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_PICK_IMAGE_CAMERA);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == this.RESULT_CANCELED) {
+            return;
+        }
 
-        if (requestCode == IMAGE_CAPTURE_REQUEST && resultCode == RESULT_OK){
+        // IF GALLERY SELECTED
+        if (requestCode == REQUEST_PICK_GALLERY && resultCode == RESULT_OK && data != null) {
+            if (data != null) {
+                Uri contentURI = data.getData();
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    Toast.makeText(SignupActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+                    upload_profile_image.setImageBitmap(bitmap);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(SignupActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                }
+            }
 
 
+        } else if (requestCode == REQUEST_PICK_IMAGE_CAMERA && resultCode == RESULT_OK && data != null) {
+            // IF CAMERA SELECTED
+            bitmap = (Bitmap) data.getExtras().get("data");
+            upload_profile_image.setImageBitmap(bitmap);
+            //saveImage(thumbnail);
+            Toast.makeText(SignupActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }
     }
 
 
-    private File createImageFile() {
-        // create image filename
-        String imageFileName = "JPEG_00";
 
-        // ACCESS storage directory for photos and create temporary photo
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = null;
-
-        try{
-            image = File.createTempFile(imageFileName, ".jpg", storageDir);
-        } catch (IOException e) {
-            e.printStackTrace();
+    /**
+     * Check Manifest Camera Permission
+     * @return
+     */
+    private boolean isPermissionGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }else{
+                return true;
+            }
+        }else {
+            return true;
         }
+    }
 
 
-        assert image != null;
-        currentPhotoPath = image.getAbsolutePath();
-        Log.e("Photo Path", currentPhotoPath);
-        return image;
+    private String imageToString(Bitmap bitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] imageByte = byteArrayOutputStream.toByteArray();
 
+        return Base64.encodeToString(imageByte, Base64.DEFAULT);
     }
 
 
@@ -318,6 +371,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 params.put("password", password);
                 params.put("mobile_no", mobileNo);
                 params.put("vehicle_no", vehicleNo);
+                params.put("image", imageToString(bitmap));
+                params.put("image_name", mobileNo);
 
                 return params;
             }

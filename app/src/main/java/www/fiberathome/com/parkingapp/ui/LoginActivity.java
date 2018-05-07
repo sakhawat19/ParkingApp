@@ -162,6 +162,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         user.setFullName(userJson.getString("fullname"));
                         user.setMobileNo(userJson.getString("mobile_no"));
                         user.setVehicleNo(userJson.getString("vehicle_no"));
+                        user.setProfilePic(userJson.getString("image"));
 
                         // storing the user in sharedPreference
                         SharedPreManager.getInstance(getApplicationContext()).userLogin(user);

@@ -7,17 +7,28 @@ public class User {
     private String password;
     private String mobileNo;
     private String vehicleNo;
+    private String profilePic;
 
     public User(){
 
     }
 
-    public User(int id, String fullName, String password, String mobileNo, String vehicleNo) {
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
+
+    public User(int id, String fullName, String password, String mobileNo, String vehicleNo, String profilePic) {
         this.id = id;
         this.fullName = fullName;
         this.password = password;
         this.mobileNo = mobileNo;
         this.vehicleNo = vehicleNo;
+        this.profilePic = profilePic;
+
     }
 
     public int getId() {

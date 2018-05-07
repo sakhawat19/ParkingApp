@@ -20,9 +20,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.CameraUpdate;
@@ -52,6 +54,7 @@ import www.fiberathome.com.parkingapp.ui.LoginActivity;
 import www.fiberathome.com.parkingapp.ui.MapActivity;
 import www.fiberathome.com.parkingapp.ui.ProfileActivity;
 import www.fiberathome.com.parkingapp.ui.QrActivity;
+import www.fiberathome.com.parkingapp.utils.AppConfig;
 import www.fiberathome.com.parkingapp.utils.BaseActivity;
 import www.fiberathome.com.parkingapp.utils.SharedPreManager;
 
@@ -82,6 +85,7 @@ public class HomeActivity extends AppCompatActivity
     private NavigationView navigationView;
     private TextView userFullName;
     private TextView userVehicleNo;
+    private ImageView userProfilePic;
 
     private boolean isGoogleDone = false;
     private boolean isMyServerDone = false;
@@ -139,10 +143,19 @@ public class HomeActivity extends AppCompatActivity
         // getting User Information
         User user = SharedPreManager.getInstance(this).getUser();
         View headerView = navigationView.getHeaderView(0);
+
         userFullName = headerView.findViewById(R.id.header_fullname);
         userVehicleNo = headerView.findViewById(R.id.header_vehicle_no);
+        userProfilePic = headerView.findViewById(R.id.header_profile_pic);
+
+        // update user fullname & vehicle no information.
         userFullName.setText(user.getFullName());
         userVehicleNo.setText(user.getVehicleNo());
+
+
+        String url = AppConfig.IMAGES_URL + user.getProfilePic() + ".jpg";
+        Log.e("URL",url);
+        Glide.with(this).load(url).into(userProfilePic);
 
 
 
