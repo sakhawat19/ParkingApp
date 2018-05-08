@@ -48,7 +48,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import www.fiberathome.com.parkingapp.HomeActivity;
 import www.fiberathome.com.parkingapp.Manifest;
 import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.model.User;
@@ -74,7 +73,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
 
 
-
     // image permission
     private static final int REQUEST_PICK_GALLERY = 1001;
     private static final int REQUEST_PICK_IMAGE_CAMERA = 1002;
@@ -97,7 +95,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         // Check user is logged in
         if (SharedPreManager.getInstance(getApplicationContext()).isLoggedIn()){
-            Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
+            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }

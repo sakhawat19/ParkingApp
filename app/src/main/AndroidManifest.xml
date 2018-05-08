@@ -5,19 +5,19 @@
     <!-- camera permission -->
 
     <uses-feature android:name="android.hardware.camera" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <!-- storage permission -->
-    <uses-permission android:name="ANDROID.PERMISSION.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="ANDROID.PERMISSION.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- network permission -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".utils.AppController"
@@ -37,17 +37,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".HomeActivity"
-            android:theme="@style/AppTheme.DefaultActionBar" />
+
+
+        <activity android:name=".ui.MainActivity"></activity>
+
         <activity
             android:name=".ui.SignupActivity"
             android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
             android:name=".ui.LoginActivity"
             android:theme="@style/AppTheme.DefaultActionBar" />
-        <activity android:name=".ui.QrActivity" />
-        <activity android:name=".ui.ProfileActivity" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -61,12 +60,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".ui.MapActivity"
-            android:label="@string/title_activity_map" />
-
-
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="www.fiberathome.com.parkingapp.fileprovider"
@@ -74,7 +67,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
     </application>

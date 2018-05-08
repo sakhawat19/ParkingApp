@@ -39,8 +39,6 @@ dependencies {
     // android circular imageview
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
-
-
     // Google Play Service
     //Google play services
     compile 'com.google.android.gms:play-services:11.4.0'

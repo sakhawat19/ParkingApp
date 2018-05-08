@@ -27,7 +27,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import www.fiberathome.com.parkingapp.HomeActivity;
 import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.model.User;
 import www.fiberathome.com.parkingapp.utils.AppConfig;
@@ -56,7 +55,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // Check user is logged in
         if (SharedPreManager.getInstance(getApplicationContext()).isLoggedIn()){
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
@@ -169,7 +168,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
                         // Move to another Activity
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
 
