@@ -22,9 +22,6 @@ public class StartActivity extends BaseActivity
     private Button signupBtn;
 
 
-
-
-
     public static final String APPLICATION_ID = "FIBERATHOMEAPP"; // must be proper application identifier
     public static final String SECRET = "6b42713e7fcb0f08b9e01298eaad5805"; // must be proper secret
     public static final String DEFAULT_USER = "atif.hafizuddin"; // must be a proper user
@@ -51,14 +48,39 @@ public class StartActivity extends BaseActivity
 //            System.out.println("Sensor = " + sensorBasic.toString());
 //        }
 
-        // Check user is logged in
-        if (SharedPreManager.getInstance(getApplicationContext()).isLoggedIn()){
-            Intent intent = new Intent(StartActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
+
+        splash();
 
 
+    }
+
+
+    public void splash() {
+        //rotateAndZoomAnimation();
+        Thread timerTread = new Thread() {
+            public void run() {
+                try {
+                    sleep(1000);
+
+                    // Check user is logged in
+                    if (SharedPreManager.getInstance(getApplicationContext()).isLoggedIn()){
+                        Intent intent = new Intent(StartActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+
+                } finally {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        };
+        timerTread.start();
     }
 
     @Override

@@ -181,6 +181,7 @@ public class GPSTracker extends Service implements LocationListener {
 
         // Setting Dialog Title
         alertDialog.setTitle("GPS is settings");
+        alertDialog.setCancelable(false);
 
         // Setting Dialog Message
         alertDialog.setMessage("GPS is not enabled. Do you want to enable it?");
@@ -197,11 +198,11 @@ public class GPSTracker extends Service implements LocationListener {
         });
 
         // on pressing cancel button
-        alertDialog.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+//        alertDialog.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.cancel();
+//            }
+//        });
 
         // Showing Alert Message
         alertDialog.show();

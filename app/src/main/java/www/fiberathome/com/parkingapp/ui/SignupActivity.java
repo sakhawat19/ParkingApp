@@ -272,6 +272,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         byte[] imageByte = byteArrayOutputStream.toByteArray();
 
         return Base64.encodeToString(imageByte, Base64.DEFAULT);
+
     }
 
 
@@ -300,7 +301,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         String password = passwordET.getText().toString().trim();
 
         //showMessage(mobileNo + " " + vehicleNo + " " + password);
-        registerUser(fullname, mobileNo, vehicleNo, password);
+        if (bitmap != null){
+            registerUser(fullname, mobileNo, vehicleNo, password);
+        }else{
+            showMessage("Try Again. Please Upload Vehicle Photo!");
+        }
+
 
     }
 
