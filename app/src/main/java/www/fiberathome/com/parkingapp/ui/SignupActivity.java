@@ -1,21 +1,19 @@
 package www.fiberathome.com.parkingapp.ui;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.CountDownTimer;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -23,6 +21,7 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,29 +34,21 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.gms.cast.framework.media.ImagePicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import www.fiberathome.com.parkingapp.Manifest;
 import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.model.User;
 import www.fiberathome.com.parkingapp.utils.AppConfig;
 import www.fiberathome.com.parkingapp.utils.AppController;
-import www.fiberathome.com.parkingapp.utils.ConstructJSON;
 import www.fiberathome.com.parkingapp.utils.HttpsTrustManager;
 import www.fiberathome.com.parkingapp.utils.SharedPreManager;
-
-import static android.Manifest.permission.CAMERA;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -70,6 +61,15 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private EditText vehicleET;
     private EditText passwordET;
     private TextView link_login;
+
+    // ViewPager information
+    // OTP Verification Page
+    private ViewPager viewPager;
+    private ViewPagerAdapter adapter;
+    private Button btnVerifyOTP;
+    private EditText inputOTP;
+    private CountDownTimer countDownTimer;
+    private TextView countdown;
 
 
 
@@ -98,12 +98,39 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             Intent intent = new Intent(SignupActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
+            return;
         }
 
 
 
         // Initialize Components
         initializeComponent();
+
+
+        adapter = new ViewPagerAdapter();
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+           @Override
+           public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+           }
+
+           @Override
+           public void onPageSelected(int position) {
+
+           }
+
+           @Override
+           public void onPageScrollStateChanged(int state) {
+
+           }
+       });
+
+
+       // check preference is waiting for SMS
+        if (SharedPreManager.getInstance(this).isWaitingForSMS()){
+            viewPager.setCurrentItem(1);
+        }
 
 
     }
@@ -116,6 +143,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         passwordET = findViewById(R.id.input_password);
         link_login = findViewById(R.id.link_login);
         upload_profile_image = findViewById(R.id.upload_profile_image);
+
+        // init viewpager
+        viewPager = findViewById(R.id.viewPagerVertical);
+        countdown = findViewById(R.id.countdown);
 
         inputLayoutFullName = findViewById(R.id.layout_fullname);
         inputLayoutMobile = findViewById(R.id.layout_mobile_number);
@@ -317,7 +348,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         progressDialog.setIndeterminate(false);
         progressDialog.show();
 
-
         HttpsTrustManager.allowAllSSL();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.URL_REGISTER, new Response.Listener<String>() {
@@ -339,19 +369,27 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                         // getting user object
                         JSONObject userJson = jsonObject.getJSONObject("user");
 
+                        showMessage(userJson.getString("image"));
+
                         // creating new User Object
                         User user = new User();
                         user.setFullName(userJson.getString("fullname"));
-                        user.setFullName(userJson.getString("mobile_no"));
-                        user.setFullName(userJson.getString("vehicle_no"));
+                        user.setMobileNo(userJson.getString("mobile_no"));
+                        user.setVehicleNo(userJson.getString("vehicle_no"));
+                        user.setProfilePic(userJson.getString("image"));
+
 
                         // Store to share preference
-                        SharedPreManager.getInstance(getApplicationContext()).userLogin(user);
+                        //SharedPreManager.getInstance(getApplicationContext()).userLogin(user);
 
-                        // Move to another activity
-                        Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
+                        // boolean flag saying device is waiting for sms
+                        SharedPreManager.getInstance(getApplicationContext()).setIsWaitingForSMS(true);
+
+                        // Moving the screen to next pager item i.e otp screen
+                        viewPager.setCurrentItem(1);
+                        startCountDown();
+                        // set edit layout with layout visibility.
+
                     }else{
                         showMessage(jsonObject.getString("message"));
                     }
@@ -362,6 +400,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 }
 
             }
+
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -386,9 +425,27 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    private void startCountDown() {
+        new CountDownTimer(120000, 1000) {//CountDownTimer(edittext1.getText()+edittext2.getText()) also parse it to long
+
+            public void onTick(long millisUntilFinished) {
+                countdown.setText("seconds remaining: " + millisUntilFinished / 1000);
+                //here you can have your logic to set text to edittext
+            }
+
+            public void onFinish() {
+                countdown.setText("finished!");
+            }
+        }
+                .start();
+
+
+    }
+
     private void showMessage(String message) {
         Toast.makeText(SignupActivity.this, message, Toast.LENGTH_LONG).show();
     }
+
 
 
     private class MyTextWatcher implements TextWatcher{
@@ -435,6 +492,44 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private void requestFocus(EditText view) {
         if (view.requestFocus()){
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+
+    /**
+     * class ViewPager
+     * ==================================================
+     */
+
+    class ViewPagerAdapter extends PagerAdapter {
+
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+            return view == ((View) object);
+        }
+
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            int resID = 1;
+            switch (position){
+                case 0:
+                    resID = R.id.layout_signup;
+                    break;
+
+                case 1:
+                    resID = R.id.layout_otp;
+                    break;
+            }
+
+            return findViewById(resID);
         }
     }
 }

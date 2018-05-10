@@ -19,6 +19,11 @@
             android:title="QR Code" />
 
         <item
+            android:id="@+id/nav_blank_map"
+            android:icon="@drawable/ic_settings_white_24dp"
+            android:title="Payment (beta)" />
+
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/logout_white"
             android:title="Log Out"/>

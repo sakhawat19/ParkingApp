@@ -7,12 +7,15 @@ import www.fiberathome.com.parkingapp.model.User;
 
 public class SharedPreManager {
 
-    private static final String SHARED_PREF_NAME = "parkingApp";
+    private static final String SHARED_PREF_NAME = "PARKINGAPP";
     private static final String KEY_FULLNAME = "fullname";
     private static final String KEY_MOBILE_NO = "mobile_no";
     private static final String KEY_VEHICLE_NO = "vehicle_no";
     private static final String KEY_PROFILE_PIC = "profile_pic";
     private static final String KEY_ID = "id";
+
+    // SMS Tags
+    private static final String KEY_IS_WAITING_FOR_SMS = "isWaitingForSMS";
 
 
     private static SharedPreManager instance;
@@ -39,6 +42,7 @@ public class SharedPreManager {
     public void userLogin(User user){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
         editor.putInt(KEY_ID, user.getId());
         editor.putString(KEY_FULLNAME, user.getFullName());
         editor.putString(KEY_MOBILE_NO, user.getMobileNo());
@@ -47,9 +51,28 @@ public class SharedPreManager {
         editor.apply();
     }
 
-    public boolean isLoggedIn(){
+
+    public void setIsWaitingForSMS(boolean isWaiting){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_PROFILE_PIC, isWaiting);
+        editor.apply();
+    }
+
+    public boolean isWaitingForSMS(){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_MOBILE_NO, null) != null;
+    }
+
+
+
+    public boolean isLoggedIn(){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        if (sharedPreferences.getString(KEY_MOBILE_NO, null) != null){
+            return true;
+        }else {
+            return false;
+        }
     }
 
 

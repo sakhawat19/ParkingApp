@@ -51,4 +51,5 @@ public class AppController extends Application {
     public void setConnectivityListener(ConnectivityReceiver.ConnectivityReceiverListener listener){
         ConnectivityReceiver.listener = listener;
     }
+
 }

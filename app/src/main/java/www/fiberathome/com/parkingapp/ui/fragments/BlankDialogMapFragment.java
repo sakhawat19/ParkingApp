@@ -1,15 +1,11 @@
 package www.fiberathome.com.parkingapp.ui.fragments;
 
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -23,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -46,13 +41,18 @@ import www.fiberathome.com.parkingapp.module.PlayerPrefs;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener,
+public class BlankDialogMapFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener,
         OnMapReadyCallback,
         GooglePlaceSearchNearbySearchListener,
         GoogleMap.OnMarkerClickListener,
         GPSTrackerListener,
         GoogleMap.OnInfoWindowClickListener,
         View.OnClickListener {
+
+
+    public BlankDialogMapFragment() {
+        // Required empty public constructor
+    }
 
 
     private static final String TAG = HomeFragment.class.getSimpleName();
@@ -79,11 +79,6 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
 
     private boolean isGoogleDone = false;
     private boolean isMyServerDone = false;
-
-
-    public HomeFragment() {
-        // Required empty public constructor
-    }
 
 
     @Override

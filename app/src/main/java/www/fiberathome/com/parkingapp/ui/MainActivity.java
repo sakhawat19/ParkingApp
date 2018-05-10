@@ -26,6 +26,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.model.User;
+import www.fiberathome.com.parkingapp.ui.fragments.BlankDialogMapFragment;
 import www.fiberathome.com.parkingapp.ui.fragments.HomeFragment;
 import www.fiberathome.com.parkingapp.ui.fragments.ProfileFragment;
 import www.fiberathome.com.parkingapp.ui.fragments.QRCodeFragment;
@@ -53,12 +54,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // check if sharedPreference has any value
         // Check user is logged in
-        if (!SharedPreManager.getInstance(getApplicationContext()).isLoggedIn()) {
+        if (!SharedPreManager.getInstance(this).isLoggedIn()) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
+            return;
         }
 
+        showMessage("Done");
 
         navigationView = findViewById(R.id.nav_view_fragment);
 
@@ -81,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
-
         QRCode = headerView.findViewById(R.id.header_qrcode);
 
         QRCode.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //show QR on create
-        String text = user.getFullName();
+        String text = user.getMobileNo() + " - ";
         text = text + user.getVehicleNo();
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
@@ -108,8 +109,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (WriterException e) {
             e.printStackTrace();
         }
-
-
 
 
 
@@ -138,6 +137,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
+
+
     }
 
 
@@ -158,6 +159,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_qrcode:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new QRCodeFragment()).commit();
+                break;
+
+            case R.id.nav_blank_map:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new BlankDialogMapFragment()).commit();
+
                 break;
 
             case R.id.nav_logout:
