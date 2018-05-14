@@ -1,6 +1,7 @@
 package www.fiberathome.com.parkingapp.ui.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
+import java.util.Objects;
 
 import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.model.User;
@@ -34,12 +37,12 @@ public class ProfileFragment extends Fragment {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_profile, container, false);
-
         // intialize
         fullnameTV = view.findViewById(R.id.user_fullName);
         mobileNoTV = view.findViewById(R.id.user_mobile_no);
@@ -47,6 +50,8 @@ public class ProfileFragment extends Fragment {
         userProfilePic = view.findViewById(R.id.profile_image);
 
         User user = SharedPreManager.getInstance(getContext()).getUser();
+
+        Objects.requireNonNull(getActivity()).setTitle(user.getFullName());
         fullnameTV.setText(user.getFullName());
         mobileNoTV.setText("+88" + user.getMobileNo());
         vehicleNoTV.setText(user.getVehicleNo());

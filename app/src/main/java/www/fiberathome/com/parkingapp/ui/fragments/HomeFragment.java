@@ -191,7 +191,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
             googleMap.setMyLocationEnabled(true);
             googleMap.getUiSettings().setAllGesturesEnabled(true);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 18));
-            //googleMap.setTrafficEnabled(true);
+            googleMap.setTrafficEnabled(true);
 
             // Disable: Disable zooming controls
             googleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -246,6 +246,9 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
         showMessage(latitude + "---" + longitude);
         if (latitude != 0 || longitude != 0) {
             GlobalVars.location = new MyLocation(latitude, longitude);
+//            if (googleMap != null)
+//                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 18));
+//            refreshUserGPSLocation();
         }
 
     }

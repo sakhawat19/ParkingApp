@@ -85,6 +85,7 @@ public class BlankDialogMapFragment extends Fragment implements NavigationView.O
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        getActivity().setTitle("Payment");
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
 

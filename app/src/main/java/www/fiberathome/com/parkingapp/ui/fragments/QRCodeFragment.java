@@ -35,6 +35,8 @@ public class QRCodeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_qrcode, container, false);
 
+        // Set the title of fragment
+        getActivity().setTitle("QR Code");
         QRCode = view.findViewById(R.id.sample_qr_iv);
 
 
