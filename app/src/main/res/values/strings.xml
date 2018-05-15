@@ -26,7 +26,11 @@
     <string name="title_activity_map">Map</string>
 
 
+    <!-- Google Map API -->
     <string name="google_maps_key">AIzaSyCz4Cxoo9NosSItQ4x14Vz4K_PPe85RqN8</string>
+
+    <!-- otp button -->
+    <string name="btn_retrive_otp">Retrive OTP</string>
 
     <!-- Error Message -->
     <string name="err_msg_mobile">Enter valid mobile number!</string>

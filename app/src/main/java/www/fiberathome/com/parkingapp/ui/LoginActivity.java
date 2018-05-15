@@ -38,12 +38,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static String TAG = LoginActivity.class.getSimpleName();
 
-    private Button signinBtn;
     private EditText mobileNumberET;
     private EditText passwordET;
+
     private TextInputLayout inputLayoutMobile;
     private TextInputLayout inputLayoutPassword;
     private TextView link_signup;
+
+    private Button btnOTP;
+    private Button signinBtn;
 
     private ProgressDialog progressDialog;
 
@@ -67,6 +70,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mobileNumberET = findViewById(R.id.input_mobile_number);
         passwordET = findViewById(R.id.input_password);
         link_signup = findViewById(R.id.link_signup);
+        btnOTP = findViewById(R.id.btn_OTP);
 
         inputLayoutMobile = findViewById(R.id.input_layout_mobile);
         inputLayoutPassword = findViewById(R.id.input_layout_password);
@@ -80,6 +84,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         signinBtn.setOnClickListener(this);
         link_signup.setOnClickListener(this);
+        btnOTP.setOnClickListener(this);
 
 
         //mobileNumberET.addTextChangedListener(new MyTextWatcher(inputLayoutMobile));
@@ -100,6 +105,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.link_signup:
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.btn_OTP:
+                showMessage("Show OTP Dialog Box");
                 break;
 
         }
@@ -130,6 +138,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.setIndeterminate(false);
+
+        // Hide the OTP Button
+        btnOTP.setVisibility(View.GONE);
 
         // inactive button
         progressDialog.show();
@@ -173,6 +184,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         startActivity(intent);
                         finish();
 
+                    }else if (jsonObject.getBoolean("error") && jsonObject.has("authentication")){
+                        // IF ERROR OCCURS AND AUTHENTICATION IS INVALID
+                        if (!jsonObject.getBoolean("authentication")){
+                            btnOTP.setVisibility(View.VISIBLE);
+                        }
+
+
                     }else{
                         showMessage(jsonObject.getString("message"));
                     }
@@ -210,7 +228,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private boolean validateMobileNumber() {
         String mobileNumber = mobileNumberET.getText().toString().trim();
-        showMessage("");
 
         if (mobileNumber.isEmpty()) {
             inputLayoutMobile.setError(getString(R.string.err_msg_mobile));
@@ -255,7 +272,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     private void showMessage(String message){
-        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
 

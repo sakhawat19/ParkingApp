@@ -103,6 +103,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
 
 
+
         // Initialize Components
         initializeComponent();
 
@@ -143,6 +144,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         passwordET = findViewById(R.id.input_password);
         link_login = findViewById(R.id.link_login);
         upload_profile_image = findViewById(R.id.upload_profile_image);
+        btnVerifyOTP = findViewById(R.id.btn_verify_otp);
+        inputOTP = findViewById(R.id.inputOtp);
 
         // init viewpager
         viewPager = findViewById(R.id.viewPagerVertical);
@@ -163,6 +166,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         signupBtn.setOnClickListener(this);
         link_login.setOnClickListener(this);
         upload_profile_image.setOnClickListener(this);
+        btnVerifyOTP.setOnClickListener(this);
 
         fullnameET.addTextChangedListener(new MyTextWatcher(fullnameET));
         mobileET.addTextChangedListener(new MyTextWatcher(mobileET));
@@ -196,7 +200,80 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 }
                 break;
 
+            case R.id.btn_verify_otp:
+                // GETTING THE OTP VALUE FROM USER.
+                String otp = inputOTP.getText().toString().trim();
+                submitOTPVerification(otp);
+                break;
+
         }
+
+    }
+
+    private void submitOTPVerification(final String otp) {
+        progressDialog = new ProgressDialog(SignupActivity.this);
+        progressDialog.setMessage("Verifying OTP...");
+        progressDialog.setCancelable(false);
+        progressDialog.setIndeterminate(false);
+        progressDialog.show();
+
+        HttpsTrustManager.allowAllSSL();
+        if (!otp.isEmpty()){
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.URL_VERIFY_OTP, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.e("URL", AppConfig.URL_VERIFY_OTP);
+                    progressDialog.dismiss();
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        Log.e("object", jsonObject.toString());
+
+
+                        if (! jsonObject.getBoolean("error")){
+
+                            // FETCHING USER INFORMATION FROM DATABASE
+                            JSONObject userJson = jsonObject.getJSONObject("user");
+
+                            if (SharedPreManager.getInstance(getApplicationContext()).isWaitingForSMS()){
+                                SharedPreManager.getInstance(getApplicationContext()).setIsWaitingForSMS(false);
+
+
+                                // MOVE TO ANOTHER ACTIVITY
+                                showMessage("Dear " + userJson.getString("fullname") + ", Your registration completed successfully.");
+                                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("otp", otp);
+                    return params;
+                }
+            };
+
+
+            AppController.getInstance().addToRequestQueue(stringRequest, TAG);
+        }else{
+            // OTP IS EMPTY.
+            progressDialog.dismiss();
+            showMessage("Please enter valid OTP.");
+        }
+
 
     }
 
@@ -367,16 +444,16 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                         showMessage(jsonObject.getString("message"));
 
                         // getting user object
-                        JSONObject userJson = jsonObject.getJSONObject("user");
+                        //JSONObject userJson = jsonObject.getJSONObject("user");
 
-                        showMessage(userJson.getString("image"));
+                        //showMessage(userJson.getString("image"));
 
                         // creating new User Object
-                        User user = new User();
-                        user.setFullName(userJson.getString("fullname"));
-                        user.setMobileNo(userJson.getString("mobile_no"));
-                        user.setVehicleNo(userJson.getString("vehicle_no"));
-                        user.setProfilePic(userJson.getString("image"));
+                        //User user = new User();
+                        //user.setFullName(userJson.getString("fullname"));
+                        //user.setMobileNo(userJson.getString("mobile_no"));
+                        //user.setVehicleNo(userJson.getString("vehicle_no"));
+                        //user.setProfilePic(userJson.getString("image"));
 
 
                         // Store to share preference
