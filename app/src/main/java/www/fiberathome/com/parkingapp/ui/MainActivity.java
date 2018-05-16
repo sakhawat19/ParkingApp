@@ -27,6 +27,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.model.User;
 import www.fiberathome.com.parkingapp.ui.fragments.BlankDialogMapFragment;
+import www.fiberathome.com.parkingapp.ui.fragments.ChangePasswordFragment;
 import www.fiberathome.com.parkingapp.ui.fragments.HomeFragment;
 import www.fiberathome.com.parkingapp.ui.fragments.ProfileFragment;
 import www.fiberathome.com.parkingapp.ui.fragments.QRCodeFragment;
@@ -167,6 +168,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
 
+            case R.id.nav_change_password:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new ChangePasswordFragment()).commit();
+
+                break;
+
             case R.id.nav_logout:
                 showMessage("Logout Successfully");
                 SharedPreManager.getInstance(this).logout();
@@ -184,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void showMessage(String message) {
-        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
 
