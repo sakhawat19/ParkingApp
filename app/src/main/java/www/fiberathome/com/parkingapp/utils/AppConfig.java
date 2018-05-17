@@ -9,6 +9,9 @@ public class AppConfig {
     public static final String URL_VERIFY_OTP   = ROOT_URL + "verify_otp.php";
     public static final String IMAGES_URL       = "http://163.47.157.195/cportal/parkingapp/uploads/";
 
+    // Retrofit URLs
+    public static final String URL_CHANGE_PASSWORD = ROOT_URL + "change_password.php/";
+
 
     // SMS provider identification
     // It should match with your SMS gateway origin

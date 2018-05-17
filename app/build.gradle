@@ -41,6 +41,13 @@ dependencies {
     // android circular imageview
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    // retrofit libraries
+    compile 'com.squareup.retrofit2:retrofit:2.4.0'
+    // retrofit coverted gson data
+    compile 'com.squareup.retrofit2:converter-gson:2.4.0'
+    // google gson
+    implementation 'com.google.code.gson:gson:2.8.4'
+
     // Google Play Service
     //Google play services
     compile 'com.google.android.gms:play-services:11.4.0'

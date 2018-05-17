@@ -1,13 +1,35 @@
 package www.fiberathome.com.parkingapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class User {
 
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("fullname")
     private String fullName;
+
+    @SerializedName("password")
     private String password;
+
+    @SerializedName("mobile_no")
     private String mobileNo;
+
+    @SerializedName("vehicle_no")
     private String vehicleNo;
+
+    @SerializedName("profile_pic")
     private String profilePic;
+
+    @SerializedName("old_password")
+    private String old_password;
+
+    @SerializedName("new_password")
+    private String new_password;
+
+    @SerializedName("confirm_password")
+    private String confirm_password;
 
     public User(){
 

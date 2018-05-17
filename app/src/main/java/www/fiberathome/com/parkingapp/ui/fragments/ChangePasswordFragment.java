@@ -1,12 +1,14 @@
 package www.fiberathome.com.parkingapp.ui.fragments;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +20,23 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import www.fiberathome.com.parkingapp.R;
+import www.fiberathome.com.parkingapp.api.ApiClient;
+import www.fiberathome.com.parkingapp.api.ApiService;
+import www.fiberathome.com.parkingapp.model.User;
 import www.fiberathome.com.parkingapp.ui.LoginActivity;
+import www.fiberathome.com.parkingapp.utils.MSG;
+import www.fiberathome.com.parkingapp.utils.SharedPreManager;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ChangePasswordFragment extends Fragment implements View.OnClickListener {
 
+    private static final String TAG = ChangePasswordFragment.class.getSimpleName();
     private TextInputLayout inputLayoutOldPassword;
     private TextInputLayout inputLayoutNewPassword;
     private TextInputLayout inputLayoutConfirmPassword;
@@ -35,6 +46,8 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
     private EditText confirmPasswordET;
 
     private Button changePasswordBtn;
+
+    private ProgressDialog progressDialog;
 
 
 
@@ -71,6 +84,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         changePasswordBtn.setOnClickListener(this);
 
         oldPasswordET.addTextChangedListener(new MyTextWatcher(oldPasswordET));
+
     }
 
     @Override
@@ -98,8 +112,6 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
             return;
         }
 
-        // CHECK OLD PASSWORD MATCHED
-        showMessage("Validation Completed");
 
 
         /**
@@ -111,31 +123,61 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
          */
         if (validateEditText(oldPasswordET, inputLayoutOldPassword, R.string.err_old_password)){
             // IF PASSWORD IS VALID, MOVE TO SERVER WITH user request.
-            showMessage("VALIDATE PASSWORD!");
 
             // COLLECT OLD PASSWORD | NEW PASSWORD | CONFIRMATION PASSWORD
-            String oldPassword = oldPasswordET.getText().toString().trim();
-            String newPassword = newPasswordET.getText().toString().trim();
-            String confirmPassword = confirmPasswordET.getText().toString().trim();
 
-            // TODO : CHECK OLD PASSWORD AND NEW PASSWORD SAME
-            // TODO : CHECK PASSWORD CONTAINS ANY SPECIAL CHARACTER
-            checkPasswordFromServer(oldPassword, newPassword, confirmPassword);
+            User user = SharedPreManager.getInstance(getContext()).getUser();
+            String old_password = oldPasswordET.getText().toString().trim();
+            String new_password = newPasswordET.getText().toString().trim();
+            String confirm_password = confirmPasswordET.getText().toString().trim();
+            String mobile_no = user.getMobileNo().trim();
+
+            updatePassword(old_password, new_password, confirm_password, mobile_no);
 
         }
 
     }
 
     /**
-     * Change old password and update with new password with confirmation.
-     * ================================================================================
-     * @param oldPassword
-     * @param newPassword
-     * @param confirmPassword
+     *
+     * @param old_password
+     * @param new_password
+     * @param confirm_password
+     * @param mobile_no
      */
-    private void checkPasswordFromServer(String oldPassword, String newPassword, String confirmPassword) {
-        // TODO : HAVE TO CHANGE OLD PASSWORD AND NEW PASSWORD
+    private void updatePassword(String old_password, String new_password, String confirm_password, String mobile_no) {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Loading...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        // Changing Password through UI Service.
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<MSG> passwordUpgradeCall = service.updatePassword(old_password, new_password, confirm_password, mobile_no);
+
+        // Gathering results.
+        passwordUpgradeCall.enqueue(new Callback<MSG>() {
+            @Override
+            public void onResponse(Call<MSG> call, Response<MSG> response) {
+                Log.e(TAG, response.message());
+
+                progressDialog.dismiss();
+                if (!response.body().getError()){
+                    showMessage(response.body().getMessage());
+                }else{
+                    showMessage(response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MSG> call, Throwable errors) {
+                Log.e("Throwable Errors: ", errors.toString());
+            }
+        });
+
     }
+
 
     private void showMessage(String message){
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
