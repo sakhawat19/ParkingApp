@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private Button btnOTP;
     private Button signinBtn;
+    private Button forgetPasswordBtn;
 
     private ProgressDialog progressDialog;
 
@@ -70,7 +71,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mobileNumberET = findViewById(R.id.input_mobile_number);
         passwordET = findViewById(R.id.input_password);
         link_signup = findViewById(R.id.link_signup);
-        btnOTP = findViewById(R.id.btn_OTP);
+        btnOTP = findViewById(R.id.btn_retrive_otp);
+        forgetPasswordBtn = findViewById(R.id.link_forget_password);
 
         inputLayoutMobile = findViewById(R.id.input_layout_mobile);
         inputLayoutPassword = findViewById(R.id.input_layout_password);
@@ -85,6 +87,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         signinBtn.setOnClickListener(this);
         link_signup.setOnClickListener(this);
         btnOTP.setOnClickListener(this);
+        forgetPasswordBtn.setOnClickListener(this);
 
 
         //mobileNumberET.addTextChangedListener(new MyTextWatcher(inputLayoutMobile));
@@ -102,12 +105,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.signin_btn:
                 submitLogin();
                 break;
+
             case R.id.link_signup:
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.btn_OTP:
-                showMessage("Show OTP Dialog Box");
+
+            case R.id.btn_retrive_otp:
+                Intent otpIntent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(otpIntent);
+                break;
+
+            case R.id.link_forget_password:
+                Intent forgetPasswordIntent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                startActivity(forgetPasswordIntent);
                 break;
 
         }
@@ -187,6 +198,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }else if (jsonObject.getBoolean("error") && jsonObject.has("authentication")){
                         // IF ERROR OCCURS AND AUTHENTICATION IS INVALID
                         if (!jsonObject.getBoolean("authentication")){
+                            showMessage(jsonObject.getString("message"));
                             btnOTP.setVisibility(View.VISIBLE);
                         }
 

@@ -2,6 +2,7 @@ package www.fiberathome.com.parkingapp.ui.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -9,10 +10,13 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -33,8 +37,10 @@ import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import www.fiberathome.com.parkingapp.GoogleMapWebService.GooglePlaceSearchNearbySearchListener;
+import www.fiberathome.com.parkingapp.Manifest;
 import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.gps.GPSTracker;
 import www.fiberathome.com.parkingapp.gps.GPSTrackerListener;
@@ -80,21 +86,30 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
     private boolean isGoogleDone = false;
     private boolean isMyServerDone = false;
 
+    private static final int PERMISSION_REQUEST_CODE_LOCATION = 1;
+
 
     public HomeFragment() {
-        // Required empty public constructor
+
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (checkPermission()){
+            showMessage("Permission already grated.");
+        }else if (!checkPermission()){
+            showMessage("Permission Not Grated!");
+            requestPermission();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
-
-
         initialize();
-
         return view;
     }
 
@@ -131,11 +146,58 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
 
     }
 
-
     private void initMap() {
         if (googleMap == null) {
             SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             supportMapFragment.getMapAsync(this);
+        }
+
+    }
+
+    /**
+     * CHECK PERMISSION FOR: ACCESS FINE LOCATION & ACCESS COARSE LOCATION
+     * ===================================================================================
+     * if there is not permission granted, just enable the permission.
+     */
+    private boolean checkPermission(){
+        int access_fine_location = ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
+        int access_coarse_location = ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if (access_fine_location == PackageManager.PERMISSION_GRANTED && access_coarse_location == PackageManager.PERMISSION_GRANTED){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * REQUEST PERMISSION FOR: ACCESS FINE LOCATION & ACCESS COARSE LOCATION
+     * ===================================================================================
+     * if there is not permission available, just enable the permission.
+     */
+    private void requestPermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) && ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION)){
+            showMessage("GPS permission allows us to access location data. Please allow in App Settings for additional functionality.");
+        }else{
+            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+            }, PERMISSION_REQUEST_CODE_LOCATION);
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case PERMISSION_REQUEST_CODE_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    //Snackbar.make(view, "Permission Granted, Now you can access location data.", Snackbar.LENGTH_SHORT).show();
+                    showMessage("Permission Granted, Now you can access location data.");
+                }else{
+                    showMessage("Permission Denied, You cannot access location data.");
+                }
+                break;
         }
     }
 

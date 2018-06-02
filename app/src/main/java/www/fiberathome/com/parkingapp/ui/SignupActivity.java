@@ -1,10 +1,12 @@
 package www.fiberathome.com.parkingapp.ui;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +14,8 @@ import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -43,6 +47,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import www.fiberathome.com.parkingapp.Manifest;
 import www.fiberathome.com.parkingapp.R;
 import www.fiberathome.com.parkingapp.model.User;
 import www.fiberathome.com.parkingapp.utils.AppConfig;
@@ -71,11 +76,14 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private CountDownTimer countDownTimer;
     private TextView countdown;
 
+    private Button editPhoneNumber;
+
 
 
     // image permission
     private static final int REQUEST_PICK_GALLERY = 1001;
     private static final int REQUEST_PICK_IMAGE_CAMERA = 1002;
+    private static final int MY_CAMERA_REQUEST_CODE = 1003;
     private Bitmap bitmap;
 
 
@@ -130,6 +138,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
        // check preference is waiting for SMS
         if (SharedPreManager.getInstance(this).isWaitingForSMS()){
+            showMessage("exists");
             viewPager.setCurrentItem(1);
         }
 
@@ -198,6 +207,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 if (isPermissionGranted()){
                     showPictureDialog();
                 }
+                //bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blank_profile_pic);
                 break;
 
             case R.id.btn_verify_otp:
@@ -362,13 +372,15 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
      * @return
      */
     private boolean isPermissionGranted() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if (checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                return false;
-            }else{
-                return true;
-            }
-        }else {
+        // Check Permission for Marshmallow
+        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, REQUEST_PICK_IMAGE_CAMERA);
+            return true;
+
+        }else if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+            return true;
+
+        }else{
             return true;
         }
     }
@@ -503,7 +515,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void startCountDown() {
-        new CountDownTimer(120000, 1000) {//CountDownTimer(edittext1.getText()+edittext2.getText()) also parse it to long
+        new CountDownTimer(10000, 1000) {//CountDownTimer(edittext1.getText()+edittext2.getText()) also parse it to long
 
             public void onTick(long millisUntilFinished) {
                 countdown.setText("seconds remaining: " + millisUntilFinished / 1000);
@@ -512,10 +524,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
             public void onFinish() {
                 countdown.setText("finished!");
+                // enable the edit alert dialog
             }
-        }
-                .start();
-
+        }.start();
 
     }
 

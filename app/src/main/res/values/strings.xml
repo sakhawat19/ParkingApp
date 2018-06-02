@@ -16,6 +16,7 @@
     <string name="signup_title">SIGNUP NOW</string>
     <string name="signin_title">SIGNIN NOW</string>
     <string name="btn_signin">Sign In</string>
+    <string name="btn_retrieve_password">Retrieve Password</string>
 
     <!-- hints -->
     <string name="hint_pass">Enter Password</string>
@@ -66,12 +67,17 @@
     <string name="msg_manual_otp">(Enter the OTP below in case if we fail to detect the SMS automatically)</string>
     <string name="lbl_enter_otp">Enter OTP</string>
     <string name="lbl_submit">SUBMIT</string>
+    <string name="lbl_change_phone_number">Change Phone Number</string>
 
 
     <!-- All Title -->
     <string name="title_change_password">Change Password</string>
     <string name="title_qr_code">QR Code</string>
     <string name="title_profile">User Profile</string>
+    <string name="title_forget_password">Forget Password</string>
+
+
+
     <string name="err_new_password">Enter valid new password!</string>
     <string name="err_confirm_password">Enter valid confirm password!</string>
 

@@ -18,6 +18,7 @@
     <dimen name="profile_height">75dp</dimen>
 
     <!-- Margin -->
+    <dimen name="margin_0">0dp</dimen>
     <dimen name="margin_10">10dp</dimen>
     <dimen name="margin_20">10dp</dimen>
     <dimen name="margin_30">30dp</dimen>

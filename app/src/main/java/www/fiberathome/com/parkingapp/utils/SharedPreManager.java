@@ -61,11 +61,7 @@ public class SharedPreManager {
 
     public boolean isWaitingForSMS(){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        if (sharedPreferences.getBoolean(KEY_IS_WAITING_FOR_SMS, false)){
-            return true;
-        }else {
-            return false;
-        }
+        return sharedPreferences.getBoolean(KEY_IS_WAITING_FOR_SMS, false);
     }
 
 
