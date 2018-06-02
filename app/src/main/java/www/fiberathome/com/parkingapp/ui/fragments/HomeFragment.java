@@ -226,19 +226,9 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
 
-        if (checkPermission()){
-            showMessage("Permission already grated.");
+        refreshUserGPSLocation();
+        googleMap.setOnInfoWindowClickListener(this);
 
-            refreshUserGPSLocation();
-            googleMap.setOnInfoWindowClickListener(this);
-
-        }else if (!checkPermission()){
-            showMessage("Permission Not Grated!");
-            requestPermission();
-
-            refreshUserGPSLocation();
-            googleMap.setOnInfoWindowClickListener(this);
-        }
 
     }
     private void refreshUserGPSLocation() {
