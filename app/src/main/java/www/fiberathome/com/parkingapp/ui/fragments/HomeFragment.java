@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
         View.OnClickListener {
 
 
+
     private static final String TAG = HomeFragment.class.getSimpleName();
 
     // global view
