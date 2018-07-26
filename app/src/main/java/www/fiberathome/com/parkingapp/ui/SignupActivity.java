@@ -284,7 +284,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             showMessage("Please enter valid OTP.");
         }
 
-
     }
 
     /**
